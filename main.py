@@ -13,7 +13,7 @@ def startup():
     while True:
         if input1 == "S":
             print("Please select the file you would like to send")
-            #client.getfilepath()
+            client.getfilepath()
             client.connecttoserver()
 
             confirm = input("Send the file? Y/N(Type N to reselect file) ")
@@ -40,6 +40,8 @@ def startup():
 
         elif input1 == "R":
             server.startserver()
+            print("Download is done!")
+            time.sleep(5)
             quit()
             
 

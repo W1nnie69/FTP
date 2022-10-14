@@ -59,65 +59,69 @@ def connecttoserver():
 
     qn = input("Use a saved ip address? (Y/N)"  )
 
-    if qn == "Y":
-        with open("mydata.json", "r") as f:
-            ipaddressbook = json.load(f)
+    check = True
 
-        
-        number = len(ipaddressbook["address"])
-        
-
-        for x in range(number):
-        
-            name = ipaddressbook["address"][x]["name"]
-            ipname = ipaddressbook["address"][x]["ip"]
-            idname = ipaddressbook["address"][x]["id"]
+    while check is True:
+        if qn == "Y":
+            check = False
             
-            print(idname,name,ipname,)
+            with open("mydata.json", "r") as f:
+                ipaddressbook = json.load(f)
+
+        
+            number = len(ipaddressbook["address"])
+        
+
+            for x in range(number):
+                name = ipaddressbook["address"][x]["name"]
+                ipname = ipaddressbook["address"][x]["ip"]
+                idname = ipaddressbook["address"][x]["id"]
+            
+                print(idname,name,ipname,)
             
 
         
 
-        ans = int(input(""))
-        ip = ipaddressbook["address"][ans - 1]["ip"]
+            ans = int(input(""))
+            ip = ipaddressbook["address"][ans - 1]["ip"]
 
         
         
-        print("Ip address", ip, "selected")
+            print("Ip address", ip, "selected")
     
 
 
-    elif qn == "N":
-        print("cock")
+        elif qn == "N":
+            check = False
 
-        
-
-        ip = input("Please enter the receiver's ip address= ")
-        name = input("Please enter the receiver's name= ")
+            ip = input("Please enter the receiver's ip address= ")
+            name = input("Please enter the receiver's name= ")
     
-        newlist ={
+            newlist ={
                     
-                    "name":name,
-                    "ip":ip,
-                    "id":str(len(ipaddressbook)+1)
+                        "name":name,
+                        "ip":ip,
+                        "id":str(len(ipaddressbook)+1)
                     
-                 }
+                    }
                 
         
         
-        write_json(newlist)
+            write_json(newlist)
 
                 
 
         
         
 
-    else:
-        print(".")
+        else:
+            check = True
+            qn = input("Use a saved ip address? (Y/N)"  )
+        
         
     
     
-    port = input("Please enter the port you are using(Default port is 6969): ") or 6969
+    port = input("Please enter the port you are using(Leave empty for default port 6969): ") or 6969
     p = int(port)
     print(f"[+] Connecting to {ip}:{port}")
     s =  socket.socket()
@@ -144,6 +148,4 @@ def send():
     s.close()
     
 
-
-connecttoserver()
 

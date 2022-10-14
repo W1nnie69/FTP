@@ -24,8 +24,8 @@ def receivergui():
 
 
 def startserver():
-    myip = input("Please enter your own ip address(Leave it empty if you are not sure): ") or "0.0.0.0"
-    myport = int(input("Please enter the port you are using(Default port is 6969): ") or 6969)
+    myip = input("Please enter your own ip address(you can check it with ipconfig in cmd): ")
+    myport = int(input("Please enter the port you are using(Leave empty for default port 6969): ") or 6969)
     print(myip)
     print(myport)
     s = socket.socket()
