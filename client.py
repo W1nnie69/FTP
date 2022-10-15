@@ -51,13 +51,14 @@ def getfilepath():
 
 def connecttoserver():
     global s
+    global ipaddressbook
 
     ipaddressbook = {"address":[{"name":"test", "ip":"0.0.0.0","id":"1"}]} 
     
     
 
 
-    qn = input("Use a saved ip address? (Y/N)"  )
+    qn = input("Use a saved ip address? (Y/N/Manual)"  )
 
     check = True
 
@@ -94,6 +95,9 @@ def connecttoserver():
         elif qn == "N":
             check = False
 
+            with open("mydata.json", "r") as f:
+                ipaddressbook = json.load(f)
+
             ip = input("Please enter the receiver's ip address= ")
             name = input("Please enter the receiver's name= ")
     
@@ -101,7 +105,7 @@ def connecttoserver():
                     
                         "name":name,
                         "ip":ip,
-                        "id":str(len(ipaddressbook)+1)
+                        "id":str(len(ipaddressbook["address"])+1)
                     
                     }
                 
@@ -110,6 +114,9 @@ def connecttoserver():
             write_json(newlist)
 
                 
+        elif qn == "Manual":
+            check = False
+            ip = input("Please enter the receiver's ip address= ")
 
         
         
@@ -148,4 +155,9 @@ def send():
     s.close()
     
 
+
+
+
+def testfn():
+    print("something")
 
