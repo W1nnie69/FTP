@@ -1,6 +1,6 @@
 import re
 import socket
-import tqdm
+#import tqdm
 import os
 import tkinter as tk
 
@@ -40,7 +40,7 @@ def startserver():
     filesize = int(filesize)
 
 
-    progress = tqdm.tqdm(range(filesize), f"Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
+    #progress = tqdm.tqdm(range(filesize), f"Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
     with open(filename, "wb") as f:
         while True:
             bytes_read = client_socket.recv(buffer_size)
