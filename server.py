@@ -10,17 +10,17 @@ buffer_size = 4096
 separator = "<SEPARATOR>"
 
 
-def receivergui():
-    receiverroot = tk.Tk()
-    receiverroot.title("The better Google drive")
+# def receivergui():
+#     receiverroot = tk.Tk()
+#     receiverroot.title("The better Google drive")
 
-    canvas1 = tk.Canvas(receiverroot, width=800, height=700)
-    canvas1.pack()
+#     canvas1 = tk.Canvas(receiverroot, width=800, height=700)
+#     canvas1.pack()
 
-    img1 = tk.PhotoImage(file="sussy.gif")
-    canvas1.create_image(233, 344, image=img1)
+#     img1 = tk.PhotoImage(file="sussy.gif")
+#     canvas1.create_image(233, 344, image=img1)
 
-    receiverroot.mainloop()
+#     receiverroot.mainloop()
 
 
 def startserver():
@@ -55,3 +55,5 @@ def startserver():
     s.close()
 
 
+if __name__ == '__main__':
+    startserver()
