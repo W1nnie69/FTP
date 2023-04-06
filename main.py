@@ -18,13 +18,17 @@ def startup():
 
             confirm = input("Send the file? Y/N(Type N to reselect file) ")
 
-            while True:
+            loop = True
+
+            while loop == True:
                 if confirm == "Y":
+                    loop = False
                     client.send()
                     print("ok file done sending")
                     time.sleep(1)
                  
                 elif confirm == "N":
+                    loop = False
                     client.getfilepath()
                     confirm = input("Send the file? Y/N  ")
 
