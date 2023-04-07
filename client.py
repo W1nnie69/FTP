@@ -51,9 +51,9 @@ def getfilepath():
 
 def connecttoserver():
     global s
-    global ipaddressbook
+    #global ipaddressbook
 
-    ipaddressbook = {"address":[{"name":"test", "ip":"0.0.0.0","id":"1"}]} 
+    #ipaddressbook = {"address":[{"name":"test", "ip":"0.0.0.0","id":"1"}]} 
     
     
 
