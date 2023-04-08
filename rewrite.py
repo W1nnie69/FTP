@@ -169,15 +169,16 @@ class senderframe(ctk.CTkFrame):
         super().__init__(master, *args, **kwargs)
 
         self.configure(fg_color="#242424")
-        
-        
+    
+               
         # self.grid_rowconfigure(1, weight=0)
         # self.grid_columnconfigure(0, weight=0)
 
-        self.t = threading.Thread(target=self.sendfile)
-        self.t.daemon = True
         
         
+        self.stop_flag = threading.Event()
+
+
         self.selectfilebutton = ctk.CTkButton(self, width=100, height=50, text="Select a file to send", command=lambda: self.getfilepath())
         
         self.selectfilebutton.grid(row=0, column=0 ,pady=(100,0), padx=(15,0))
@@ -198,7 +199,7 @@ class senderframe(ctk.CTkFrame):
         self.add_new_receiver = ctk.CTkButton(self, text="add", width=40, height=30, command=lambda: self.add())
         self.add_new_receiver.grid(row=2, column=2, padx=(10,0), pady=(0,0))
 
-        self.sendbutton = ctk.CTkButton(self, text="Send the file :)", width=150, height=70, command=lambda: self.t.start())
+        self.sendbutton = ctk.CTkButton(self, text="Send the file :)", width=150, height=70, command=lambda: self.start_sendfile_thread())
         self.sendbutton.grid(row=3, column=0, padx=(30,0), pady=(40,0))
 
         self.toplevel_window = None
@@ -210,10 +211,16 @@ class senderframe(ctk.CTkFrame):
         clientroot.withdraw()
         global filename
         global filesize
-        filename = tk.filedialog.askopenfilename()
+        filename = []
+        filesize = []
+        fn = tk.filedialog.askopenfilename()
         clientroot.destroy()
-        filesize = os.path.getsize(filename)
-        print(filename)
+        fs = os.path.getsize(fn)
+        filename.append(fn)
+        filesize.append(fs)
+        print(filename, filesize)
+        
+
         file = f"File {filename} is selected"
         self.filename = ctk.CTkLabel(self, text=file)
         self.filename.grid(row=0,column=1,pady=(90,0),padx=(10,0), columnspan=1000)
@@ -275,15 +282,18 @@ class senderframe(ctk.CTkFrame):
 
     def start_sendfile_thread(self):
         print('starting thread')
-        global stop_flag
-        stop_flag = threading.Event()
-        t = threading.Thread(target=self.sendfile())
-        t.start()
-        t.join()
+        self.thread1 = threading.Thread(target=self.sendfile)
+        self.thread1.start()
+
+        self.sendbutton.configure(state="disabled")
+        self.after(100, self.update_progress_bar)
 
 
+    def stop_sendfile_thread(self):
+        self.stop_flag.set()
+        self.thread1.join()
 
-
+        print("worker has stopped")
 
 
 
@@ -302,14 +312,26 @@ class senderframe(ctk.CTkFrame):
         separator = "<SEPARATOR>"
         buffer_size = 4096
 
-        port = 21
+        port = 6969
 
         print(f"[+] Connecting to {realip}:{port}")
         s = socket.socket()
-        s.connect((realip,port))
-        s.send(f"{filename}{separator}{filesize}".encode())
 
-        time.sleep(1)
+        try:
+            s.connect((realip,port))
+            s.send(f"{filename}{separator}{filesize}".encode())
+
+
+        except TimeoutError as e:
+            print(f'Error connecting to {realip}:{port}: {e}')   
+            self.stop_flag.set()
+            self.sendbutton.configure(state="normal")
+            self.progressbar.destroy()
+            raise
+            
+
+        else:
+             print(f'Successfully connected to {realip}:{port}')    
 
         progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
 
@@ -321,13 +343,19 @@ class senderframe(ctk.CTkFrame):
                     break
             
                 s.sendall(bytes_read)
-        
                 progress.update(len(bytes_read))
+                
+
+                
                 
         s.close()
 
-        stop_flag.set()
+        print("done")
 
+        self.stop_flag.set()
+
+        self.sendbutton.configure(state="normal")
+        self.progressbar.destroy()
 
 
 

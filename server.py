@@ -55,3 +55,4 @@ def startserver():
     s.close()
 
 
+startserver()
